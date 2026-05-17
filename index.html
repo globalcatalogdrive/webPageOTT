@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>MoodX Actress Directory & Premium Webseries Catalog Index</title>
+    <meta name="description" content="Explore the comprehensive MoodX actress directory database. Access updated webseries cast profiles, official production banner photos, media streams, and verified actress portfolios.">
+    <meta name="keywords" content="MoodX actress names, MoodX actress photos, webseries actress list, Tina Nandi photo, premium stream catalog, cast profiles, actress wallpapers">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "DataCatalog",
+      "name": "MoodX Cast Directory & Video Streaming Catalog Engine",
+      "description": "Indexed database system mapping actress profiles, casting credentials, and production photos.",
+      "keywords": "MoodX actress names, webseries cast wallpapers, media stream index"
+    }
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ============================================================
+           1. CSS THEME VARIABLES
+           ============================================================ */
+        :root {
+            --bg-canvas: #F9F9FE;
+            --text-main: #101010;
+            --text-sub: #505050;
+            --border-color: #e1e4e8;
+            --nav-bg: #ffffff;
+            --nav-shadow: rgba(0, 0, 0, 0.02);
+            --filter-active-bg: #f1f3f9;
+            --source-header-bg: #eaecef;
+            --toggle-bg: #d1d5db;
+            --toggle-circle: #ffb703;
+            --toggle-transform: translateX(0px);
+            --cast-row-hover: #f1f3f9;
+        }
+
+        [data-theme="dark"] {
+            --bg-canvas: #0d0d0d;
+            --text-main: #ffffff;
+            --text-sub: #aaaaaa;
+            --border-color: #2d2d2d;
+            --nav-bg: linear-gradient(135deg, #1f1f1f 0%, #141414 100%);
+            --nav-shadow: rgba(0, 0, 0, 0.4);
+            --filter-active-bg: #1a1a1a;
+            --source-header-bg: #1f1f1f;
+            --toggle-bg: #374151;
+            --toggle-circle: #ffffff;
+            --toggle-transform: translateX(14px);
+            --cast-row-hover: #161616;
+        }
+
+        /* ============================================================
+           2. BASIC LAYOUT STRUCTURE (OPTIMIZED WIDTH)
+           ============================================================ */
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+        }
+
+        body {
+            font-family: 'Josefin Sans', sans-serif;
+            background-color: var(--bg-canvas);
+            color: var(--text-sub);
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .app-wrapper {
+            width: 100%;
+            max-width: 760px; 
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header-column-container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            margin-bottom: 12px;
+        }
+
+        .navigation-bar {
+            background: var(--nav-bg);
+            padding: 4px 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--nav-shadow);
+            width: 100%; 
+        }
+
+        /* Ultra-compacted micro switch */
+        .cylinder-toggle-track {
+            width: 36px;
+            height: 20px;
+            background-color: var(--toggle-bg);
+            border-radius: 50px;
+            cursor: pointer;
+            position: relative;
+            padding: 2px;
+            border: 1px solid var(--border-color);
+            transition: background-color 0.2s ease;
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+            margin-left: auto; 
+        }
+
+        .cylinder-toggle-circle {
+            width: 14px;
+            height: 14px;
+            background-color: var(--toggle-circle);
+            border-radius: 50%;
+            position: absolute;
+            left: 2px;
+            transform: var(--toggle-transform);
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+
+        /* ============================================================
+           3. BUTTONS & UNIFIED INLINE TOP BLOCK
+           ============================================================ */
+        .tab-button {
+            padding: 8px 14px;
+            background-color: transparent;
+            color: var(--text-sub);
+            border: none;
+            font-family: 'Josefin Sans', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .tab-button:hover {
+            color: var(--text-main);
+            background-color: var(--bg-canvas);
+        }
+
+        .tab-button.active {
+            background-color: #4b4871; 
+            color: #ffffff;
+        }
+
+        .catalog-title-filter-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end; 
+            gap: 15px;
+            margin-bottom: 12px;
+            width: 100%;
+        }
+
+        .catalog-title-left-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .filter-controls-holder {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .action-btn {
+            background-color: var(--nav-bg);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            font-family: 'Josefin Sans', sans-serif;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .action-btn:hover {
+            background-color: var(--bg-canvas);
+            border-color: #4b4871;
+            color: #4b4871;
+        }
+
+        .active-filter-badge {
+            display: none;
+            align-items: center;
+            gap: 10px;
+            background-color: var(--filter-active-bg);
+            border: 1px solid #4b4871;
+            color: var(--text-main);
+            font-weight: 600;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+        }
+
+        .active-filter-avatar {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid var(--border-color);
+            background-color: #eaecef;
+        }
+
+        .clear-filter-x {
+            margin-left: 6px;
+            cursor: pointer;
+            color: #ec001b;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 1.1rem;
+            padding: 0px 4px;
+        }
+
+        .integrated-profile-poster-card {
+            display: none;
+            width: 120px; 
+            height: 90px; 
+            flex-shrink: 0;
+        }
+
+        .active-filter-rectangular-poster {
+            width: 100%;
+            height: 100%;
+            border-radius: 6px;
+            object-fit: cover; 
+            object-position: center top;
+            border: 1px solid var(--border-color);
+            background-color: #eaecef;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            display: block;
+        }
+
+        /* ============================================================
+           4. COMPACTED STREAM CATALOG VALUE LAYOUT
+           ============================================================ */
+        .source-category-section-divider {
+            background-color: var(--source-header-bg);
+            color: #4b4871;
+            padding: 6px 12px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-left: 4px solid #4b4871;
+            margin-bottom: 10px;
+            border-radius: 0 4px 4px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .source-category-section-divider.extra-margin {
+            margin-top: 12px;
+        }
+
+        .stream-layout-manager {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 12px; 
+        }
+
+        .webseries-item-entry {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .card-metadata-row {
+            display: flex;
+            justify-content: flex-start; 
+            align-items: baseline;
+            flex-wrap: wrap; 
+            gap: 10px;      
+            width: 100%;
+            margin-bottom: 4px; 
+        }
+
+        .series-text-header {
+            font-size: clamp(1.1rem, 2vw, 1.35rem);
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .cast-link-subheader {
+            font-size: clamp(0.8rem, 1.2vw, 0.95rem);
+            color: var(--text-sub);
+        }
+
+        .cast-clickable-span {
+            color: #ec001b; 
+            font-weight: 600;
+            border-bottom: 1px dashed rgba(236, 0, 27, 0.4);
+            cursor: pointer;
+            text-decoration: none;
+        }
+        
+        .cast-clickable-span:hover {
+            color: #4b4871;
+            border-bottom-color: #4b4871;
+        }
+
+        .media-poster-canvas {
+            position: relative;
+            width: 100%;
+            display: block;
+        }
+
+        .poster-link-wrapper {
+            display: block;
+            width: 100%;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .display-photo {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 16 / 9; 
+            object-fit: cover;
+            display: block;
+            border-radius: 4px;
+        }
+
+        .badge-link-wrapper {
+            position: absolute;
+            top: 2%;
+            right: 2%;
+            z-index: 5;
+            display: inline-block;
+            text-decoration: none;
+            width: 10%;
+            min-width: 40px;
+            max-width: 80px;
+        }
+
+        .corner-overlay-brand-badge {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: drop-shadow(0px 1px 4px rgba(0, 0, 0, 0.5));
+        }
+
+        .separator-line {
+            border: 0;
+            height: 1px;
+            background-color: var(--border-color);
+            margin-top: 10px; 
+        }
+
+        /* ============================================================
+           5. SIDEBAR ARCHITECTURE (CLEAR POSITIONING IN WINDOW)
+           ============================================================ */
+        .cast-directory-layout {
+            display: flex;
+            position: relative;
+            width: 100%;
+            align-items: flex-start;
+            margin-top: 10px;
+            padding-right: 48px; 
+        }
+
+        .vertical-cast-list-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: transparent;
+            border: none;
+            gap: 6px;
+        }
+
+        /* Shifted top coordinate down to 70px to guarantee zero switch/navbar overlap */
+        .vertical-alphabet-scroller-bar {
+            display: flex;
+            flex-direction: column;
+            background: var(--nav-bg);
+            border: 1px solid var(--border-color);
+            padding: 6px 2px;
+            border-radius: 6px;
+            position: fixed;
+            right: calc((100vw - 760px) / 2 + 10px); 
+            top: 70px;
+            width: 32px;
+            height: calc(100vh - 90px); 
+            z-index: 100;
+            align-items: center;
+            justify-content: space-between; 
+            box-shadow: var(--nav-shadow);
+        }
+
+        @media (max-width: 800px) {
+            .vertical-alphabet-scroller-bar {
+                right: 10px;
+            }
+        }
+
+        .alphabet-letter-btn {
+            font-family: 'Josefin Sans', sans-serif;
+            font-weight: bold;
+            font-size: 0.75rem;
+            color: #4b4871;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            width: 24px;
+            height: 3.1vh; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .alphabet-letter-btn:hover {
+            background-color: #4b4871;
+            color: #ffffff;
+        }
+
+        .vertical-actress-row {
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background-color: var(--nav-bg);
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-decoration: none;
+            scroll-margin-top: 20px;
+        }
+
+        .vertical-actress-row:hover {
+            background-color: var(--cast-row-hover);
+            border-color: #ec001b;
+            transform: translateX(4px);
+        }
+
+        .actress-avatar-thumbnail {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid var(--border-color);
+            background-color: #eaecef;
+        }
+
+        .actress-profile-name {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .vertical-actress-row:hover .actress-profile-name {
+            color: #ec001b;
+        }
+
+        .app-page { display: none; width: 100%; }
+        .show-page { display: block; }
+
+        /* ============================================================
+           6. RESPONSIVE MEDIA QUERIES (MOBILE FIXES)
+           ============================================================ */
+        @media (max-width: 768px) {
+            body { padding: 8px; }
+            .header-column-container { margin-bottom: 10px; }
+            .tab-button { padding: 6px 10px; font-size: 0.85rem; }
+            
+            .catalog-title-filter-wrapper { 
+                flex-direction: column; 
+                align-items: flex-start; 
+                gap: 10px; 
+            }
+            .catalog-title-left-stack {
+                width: 100%;
+            }
+            .filter-controls-holder {
+                width: 100%;
+            }
+            .integrated-profile-poster-card { 
+                width: 90px; 
+                height: 70px; 
+            }
+
+            .cast-directory-layout { gap: 4px; padding-right: 36px;}
+            .vertical-alphabet-scroller-bar { 
+                width: 26px; 
+                padding: 4px 1px; 
+                height: calc(100vh - 75px); 
+                top: 60px;
+            }
+            .alphabet-letter-btn { width: 20px; font-size: 0.65rem; }
+            .actress-avatar-thumbnail { width: 36px; height: 36px; }
+            .actress-profile-name { font-size: 0.95rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-wrapper">
+
+        <!-- Navigation System Stack -->
+        <div class="header-column-container">
+            <div class="navigation-bar">
+                <a href="#home" id="homeTab" class="tab-button">Home</a>
+                <a href="#moodx" id="moodxTab" class="tab-button">MoodX</a>
+                <a href="#prime" id="primeTab" class="tab-button">Prime</a>
+                
+                <div class="cylinder-toggle-track" onclick="toggleThemeProfileMode()" title="Toggle Light/Dark Mode">
+                    <div class="cylinder-toggle-circle"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- View Segment: Home -->
+        <div id="homePage" class="app-page">
+            <h2 style="font-size: 1.3rem; margin-bottom: 10px; border-left: 4px solid #4b4871; padding-left: 8px; color: var(--text-main);">Home Dashboard</h2>
+            <p style="font-size: 0.95rem; line-height: 1.5;">Welcome to your premium production index system framework.</p>
+        </div>
+
+        <!-- View Segment: Catalog Feed -->
+        <div id="catalogDisplayPage" class="app-page">
+            
+            <div class="catalog-title-filter-wrapper">
+                <div class="catalog-title-left-stack">
+                    <h2 id="catalogPageTitle" style="font-size: 1.3rem; border-left: 4px solid #4b4871; padding-left: 8px; color: var(--text-main);">Catalog</h2>
+                    
+                    <div class="filter-controls-holder">
+                        <a href="#cast" id="filterCastBtn" class="action-btn">
+                            🔍 Filter By Cast / Actress
+                        </a>
+                        
+                        <div id="activeFilterNotificationBadge" class="active-filter-badge">
+                            <img id="activeFilterAvatarImg" class="active-filter-avatar" src="" alt="Active Portfolio Avatar" onerror="handleAvatarFallback(this)">
+                            <span>Active Profile: <strong id="activeFilterNameString" style="color: var(--text-main); margin-right: 3px;">None</strong></span>
+                            <a id="clearFilterBtnX" href="#moodx" class="clear-filter-x" title="Clear Filter">✕</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="integratedProfilePosterCard" class="integrated-profile-poster-card">
+                    <img id="activeFilterRectangularImg" class="active-filter-rectangular-poster" src="" alt="Active Webseries Actress Wallpapers" onerror="this.parentNode.style.display='none'">
+                </div>
+            </div>
+
+            <div id="loadingStatus" style="text-align:center; font-weight:600; padding:20px; color:#666; font-size:0.9rem;">Loading database records...</div>
+            <div id="verticalMediaStream" class="stream-layout-manager"></div>
+        </div>
+
+        <!-- View Segment: Select Actress Profile -->
+        <div id="castPage" class="app-page">
+            <h2 style="font-size: 1.3rem; margin-bottom: 10px; border-left: 4px solid #4b4871; padding-left: 8px; color: var(--text-main);">Select Actress Profile</h2>
+            
+            <a id="backToCatalogLink" href="#moodx" class="action-btn" style="background-color:#4b4871; color:white; border:none; margin-bottom: 10px;">
+                ← Return to Media Stream
+            </a>
+
+            <div class="cast-directory-layout">
+                <div id="verticalCastOutputBox" class="vertical-cast-list-container"></div>
+                <div id="verticalAlphabetRowScroller" class="vertical-alphabet-scroller-bar"></div>
+            </div>
+        </div>
+
+    </div>
+
+<script>
+    const bannerImage = true; 
+
+    let globalDatabaseRows = [];
+    let globalCastImagesMap = {}; 
+    let currentFilterSelection = null;
+    let currentActiveCategory = 'moodx';
+
+    function toggleThemeProfileMode() {
+        const rootElement = document.documentElement; 
+        const currentTheme = rootElement.getAttribute("data-theme");
+        if (currentTheme === "dark") {
+            rootElement.setAttribute("data-theme", "light");
+            localStorage.setItem("user-theme-choice", "light");
+        } else {
+            rootElement.setAttribute("data-theme", "dark");
+            localStorage.setItem("user-theme-choice", "dark");
+        }
+    }
+
+    function initializeSavedThemeSettings() {
+        const savedPreference = localStorage.getItem("user-theme-choice");
+        if (savedPreference) {
+            document.documentElement.setAttribute("data-theme", savedPreference);
+        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.setAttribute("data-theme", "dark");
+        } else {
+            document.documentElement.setAttribute("data-theme", "light");
+        }
+    }
+
+    function handleBrokenImageFallback(element) {
+        const imageCanvas = element.closest('.media-poster-canvas');
+        if (imageCanvas) {
+            imageCanvas.style.display = 'none';
+        }
+    }
+
+    function handleAvatarFallback(element) {
+        element.src = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23888888"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>`;
+    }
+
+    function parseCsvToRows(csvText) {
+        const lines = csvText.split(/\r?\n/);
+        let outputRows = [];
+        for (let i = 0; i < lines.length; i++) {
+            let currentLine = lines[i].trim();
+            if (currentLine === "") continue; 
+
+            let columns = [];
+            let insideQuote = false;
+            let currentColumnValue = "";
+
+            for (let charIndex = 0; charIndex < currentLine.length; charIndex++) {
+                let character = currentLine[charIndex];
+                if (character === '"') {
+                    insideQuote = !insideQuote; 
+                } else if (character === ',' && !insideQuote) {
+                    columns.push(currentColumnValue);
+                    currentColumnValue = ""; 
+                } else {
+                    currentColumnValue += character;
+                }
+            }
+            columns.push(currentColumnValue);
+            outputRows.push(columns.map(col => col.replace(/^"|"$/g, "").trim()));
+        }
+        return outputRows;
+    }
+
+    function loadCsvDataFiles() {
+        document.getElementById("loadingStatus").style.display = "block";
+        document.getElementById("verticalMediaStream").innerHTML = "";
+
+        fetch('castName.csv')
+            .then(response => {
+                if (!response.ok) {
+                    return ""; 
+                }
+                return response.text();
+            })
+            .then(castCsvText => {
+                if (castCsvText) {
+                    const castRows = parseCsvToRows(castCsvText);
+
+                    castRows.forEach(row => {
+                        if (row.length >= 2 && row[0]) {
+                            const nameKey = row[0].toLowerCase().trim();
+                            if (nameKey !== "" && nameKey !== "actress name" && nameKey !== "name") {
+                                globalCastImagesMap[nameKey] = row[1] || "";
+                            }
+                        }
+                    });
+                }
+                return fetch('database.csv');
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Could not locate database.csv table asset.");
+                }
+                return response.text(); 
+            })
+            .then(databaseCsvText => {
+                const databaseRows = parseCsvToRows(databaseCsvText);
+                let rawParsedRows = [];
+
+                databaseRows.forEach((columns, index) => {
+                    if (index === 0 && columns[0].toLowerCase() === "category") return;
+
+                    if (columns.length >= 5) {
+                        const rowObject = {
+                            category: columns[0].toLowerCase(),
+                            webseriesName: columns[1],
+                            actressName: columns[2],
+                            pictureUrl: columns[3],
+                            bannerImageUrl: columns[4]
+                        };
+                        rawParsedRows.push(rowObject);
+                    }
+                });
+                
+                globalDatabaseRows = rawParsedRows.reverse();
+                document.getElementById("loadingStatus").style.display = "none";
+                handleAppRouterState();
+            })
+            .catch(error => {
+                document.getElementById("loadingStatus").innerHTML = "Data Engine Connectivity Failure: " + error.message;
+            });
+    }
+
+    function handleAppRouterState() {
+        const hashLocation = window.location.hash || '#moodx';
+        
+        document.querySelectorAll('.app-page').forEach(page => page.classList.remove('show-page'));
+        document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+
+        if (hashLocation === '#home') {
+            document.getElementById("homeTab").classList.add('active');
+            document.getElementById("homePage").classList.add("show-page");
+        } 
+        else if (hashLocation === '#cast') {
+            document.getElementById("backToCatalogLink").href = "#" + currentActiveCategory;
+            document.getElementById("castPage").classList.add("show-page");
+            renderGlobalTextCastList();
+        } 
+        else if (hashLocation.startsWith('#moodx') || hashLocation.startsWith('#prime')) {
+            const targetCategory = hashLocation.startsWith('#moodx') ? 'moodx' : 'prime';
+            
+            const queryParamCheck = hashLocation.split('?cast=');
+            currentFilterSelection = queryParamCheck.length > 1 ? decodeURIComponent(queryParamCheck[1]) : null;
+
+            if (!currentFilterSelection) {
+                currentActiveCategory = targetCategory;
+                document.getElementById(targetCategory + "Tab").classList.add('active');
+                document.getElementById("catalogPageTitle").textContent = targetCategory.toUpperCase() + " Catalog";
+            } else {
+                document.getElementById("catalogPageTitle").textContent = "Filtered Stream";
+            }
+
+            document.getElementById("clearFilterBtnX").href = "#" + currentActiveCategory;
+            document.getElementById("catalogDisplayPage").classList.add("show-page");
+            
+            const badgeBox = document.getElementById("activeFilterNotificationBadge");
+            const filterLabelString = document.getElementById("activeFilterNameString");
+            const filterAvatarImg = document.getElementById("activeFilterAvatarImg");
+            const filterRectangularImg = document.getElementById("activeFilterRectangularImg");
+            const posterCardHolder = document.getElementById("integratedProfilePosterCard");
+            
+            if (currentFilterSelection) {
+                filterLabelString.textContent = currentFilterSelection;
+                
+                const imageLookupKey = currentFilterSelection.toLowerCase().trim();
+                const avatarSrcUrl = globalCastImagesMap[imageLookupKey] || "";
+                
+                filterAvatarImg.src = avatarSrcUrl;
+                filterAvatarImg.alt = `${currentFilterSelection} MoodX Actress Photo Profile Card`;
+                
+                if(avatarSrcUrl !== "") {
+                    filterRectangularImg.src = avatarSrcUrl;
+                    filterRectangularImg.alt = `${currentFilterSelection} Premium High-Resolution Production Image Asset`;
+                    posterCardHolder.style.display = "block";
+                } else {
+                    posterCardHolder.style.display = "none";
+                }
+                
+                badgeBox.style.display = "inline-flex";
+            } else {
+                badgeBox.style.display = "none";
+                posterCardHolder.style.display = "none";
+            }
+
+            makeStreamCards();
+        }
+    }
+
+    function makeStreamCards() {
+        const streamBox = document.getElementById("verticalMediaStream");
+        streamBox.innerHTML = "";
+
+        if (currentFilterSelection) {
+            let platformsDataMap = {};
+
+            for (let i = 0; i < globalDatabaseRows.length; i++) {
+                const item = globalDatabaseRows[i];
+                let castList = item.actressName ? item.actressName.split(';').map(n => n.trim()) : [];
+                
+                if (castList.includes(currentFilterSelection)) {
+                    let sourceKey = item.category.toUpperCase();
+                    if (!platformsDataMap[sourceKey]) {
+                        platformsDataMap[sourceKey] = [];
+                    }
+                    platformsDataMap[sourceKey].push(item);
+                }
+            }
+
+            let sourcePlatformsArray = Object.keys(platformsDataMap);
+
+            if (sourcePlatformsArray.length === 0) {
+                streamBox.innerHTML = `<div style="text-align:center; padding:20px; color:#888; font-size:0.9rem;">No series found for this profile.</div>`;
+                return;
+            }
+
+            sourcePlatformsArray.forEach((platformName, index) => {
+                const sourceHeader = document.createElement("div");
+                sourceHeader.className = "source-category-section-divider" + (index > 0 ? " extra-margin" : "");
+                sourceHeader.textContent = platformName;
+                streamBox.appendChild(sourceHeader);
+
+                platformsDataMap[platformName].forEach(item => {
+                    streamBox.appendChild(createSeriesCardNode(item));
+                });
+            });
+
+        } else {
+            let itemsFoundCount = 0;
+            for (let i = 0; i < globalDatabaseRows.length; i++) {
+                const item = globalDatabaseRows[i];
+                if (item.category !== currentActiveCategory) continue;
+
+                itemsFoundCount++;
+                streamBox.appendChild(createSeriesCardNode(item));
+            }
+
+            if (itemsFoundCount === 0) {
+                streamBox.innerHTML = `<div style="text-align:center; padding:20px; color:#888; font-size:0.9rem;">No titles loaded in this category.</div>`;
+            }
+        }
+    }
+
+    function createSeriesCardNode(item) {
+        let castList = item.actressName ? item.actressName.split(';').map(n => n.trim()) : [];
+        const itemBlock = document.createElement("div");
+        itemBlock.className = "webseries-item-entry";
+        
+        let castHtmlString = "Cast: ";
+        if (castList.length === 0) {
+            castHtmlString += "<span>Information Pending</span>";
+        } else {
+            castList.forEach((name, idx) => {
+                castHtmlString += `<a class="cast-clickable-span" href="#${item.category}?cast=${encodeURIComponent(name)}">${name}</a>`;
+                if (idx < castList.length - 1) {
+                    castHtmlString += ", ";
+                }
+            });
+        }
+
+        let platformBadgeHTML = "";
+        if (bannerImage === true && item.bannerImageUrl && item.bannerImageUrl.trim() !== "") {
+            platformBadgeHTML = `
+                <a href="${item.bannerImageUrl}" target="_blank" class="badge-link-wrapper">
+                    <img src="${item.bannerImageUrl}" class="corner-overlay-brand-badge" alt="${item.webseriesName || 'Webseries'} Official Banner" onerror="this.style.display='none'">
+                </a>`;
+        }
+
+        let posterImageBlockHTML = "";
+        if (item.pictureUrl && item.pictureUrl.trim() !== "") {
+            posterImageBlockHTML = `
+                <div class="media-poster-canvas">
+                    <a href="${item.pictureUrl}" target="_blank" class="poster-link-wrapper">
+                        <img src="${item.pictureUrl}" class="display-photo" alt="${item.actressName || 'Cast'} Photo Profile Wallpaper from ${item.webseriesName || 'Production'}" loading="lazy" onerror="handleBrokenImageFallback(this)">
+                    </a>
+                    ${platformBadgeHTML}
+                </div>`;
+        }
+
+        itemBlock.innerHTML = `
+            <div class="card-metadata-row">
+                <div class="series-text-header">${item.webseriesName || 'Untitled Production'}</div>
+                <div class="cast-link-subheader">
+                    ${castHtmlString}
+                </div>
+            </div>
+            ${posterImageBlockHTML}
+            <hr class="separator-line">
+        `;
+        return itemBlock;
+    }
+
+    function renderGlobalTextCastList() {
+        const targetOutputBox = document.getElementById("verticalCastOutputBox");
+        const alphabetSidebarContainer = document.getElementById("verticalAlphabetRowScroller");
+        
+        targetOutputBox.innerHTML = "";
+        alphabetSidebarContainer.innerHTML = "";
+
+        let uniqueNames = [];
+
+        for (let i = 0; i < globalDatabaseRows.length; i++) {
+            const item = globalDatabaseRows[i];
+            if (item.actressName) {
+                let individualNames = item.actressName.split(';').map(n => n.trim());
+                individualNames.forEach(name => {
+                    if (name !== "" && !uniqueNames.includes(name)) {
+                        uniqueNames.push(name);
+                    }
+                });
+            }
+        }
+
+        uniqueNames.sort((a, b) => a.localeCompare(b));
+        let letterAnchorElementIds = {};
+
+        let currentActiveLetter = "";
+        uniqueNames.forEach(name => {
+            const firstLetter = name.charAt(0).toUpperCase();
+            
+            if (firstLetter !== currentActiveLetter) {
+                currentActiveLetter = firstLetter;
+                letterAnchorElementIds[currentActiveLetter] = "anchor-target-" + name.replace(/[^a-zA-Z0-9]/g, "");
+            }
+
+            const rowLink = document.createElement("a");
+            rowLink.className = "vertical-actress-row";
+            rowLink.href = "#" + currentActiveCategory + "?cast=" + encodeURIComponent(name);
+            
+            if (letterAnchorElementIds[currentActiveLetter] === "anchor-target-" + name.replace(/[^a-zA-Z0-9]/g, "")) {
+                rowLink.id = letterAnchorElementIds[currentActiveLetter];
+            }
+            
+            const imgKey = name.toLowerCase().trim();
+            const runtimeAvatarSrc = globalCastImagesMap[imgKey] || "";
+
+            rowLink.innerHTML = `
+                <img class="actress-avatar-thumbnail" src="${runtimeAvatarSrc}" alt="${name} MoodX Cast Verification Photo" onerror="handleAvatarFallback(this)">
+                <div class="actress-profile-name">${name}</div>
+            `;
+            targetOutputBox.appendChild(rowLink);
+        });
+
+        const fullAlphabetList = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+        fullAlphabetList.forEach(letter => {
+            const letterBtn = document.createElement("button");
+            letterBtn.className = "alphabet-letter-btn";
+            letterBtn.textContent = letter;
+
+            if (letterAnchorElementIds[letter]) {
+                letterBtn.onclick = () => {
+                    document.getElementById(letterAnchorElementIds[letter]).scrollIntoView({ behavior: 'smooth' });
+                };
+            } else {
+                letterBtn.style.opacity = "0.25";
+                letterBtn.style.cursor = "default";
+            }
+            alphabetSidebarContainer.appendChild(letterBtn);
+        });
+    }
+
+    window.addEventListener('hashchange', handleAppRouterState);
+    window.addEventListener('DOMContentLoaded', () => {
+        initializeSavedThemeSettings();
+        loadCsvDataFiles();
+    });
+</script>
+</body>
+</html>
